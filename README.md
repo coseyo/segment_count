@@ -6,7 +6,8 @@
 ## 应用场景
 - 分析搜索短语中最热门的词
 
-## 使用方式
+## 使用说明
+- 使用 github.com/huichen/sego 作为中文分词库
 - 修改config.go，配置数据库
 - 参照 bin/main.go ，然后执行 go build segment_count ，创建入口文件
 - 输入格式: segment_count -srctable 源数据表名 -srcfield 源数据表字段名 -disttable 目标数据表名
