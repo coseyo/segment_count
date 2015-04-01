@@ -5,13 +5,19 @@ const (
 
 	MYSQL_PORT = "3306"
 
-	MYSQL_USER = "test"
+	MYSQL_USER = "root"
 
 	MYSQL_PWD = "test"
 
 	MYSQL_DB = "segment"
 
-	MYSQL_SOURCE_TABLE = "source"
+	SRC_TABLE = "source"
 
-	MYSQL_SOURCE_FIELD = "title"
+	SRC_FIELD = "title"
+
+	DIST_TABLE = "dist"
+
+	GROUP_COUNT = 1000
+
+	DICT_FILE = "github.com/huichen/sego/data/dictionary.txt"
 )
