@@ -5,7 +5,7 @@ const (
 
 	MYSQL_PORT = "3306"
 
-	MYSQL_USER = "root"
+	MYSQL_USER = "test"
 
 	MYSQL_PWD = "test"
 

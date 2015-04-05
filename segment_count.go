@@ -33,9 +33,9 @@ func Exec(srcTable string, srcField string, distTable string) error {
 	}
 	fmt.Println("total count: ", count)
 
-	chnNums := int(math.Floor(float64(count / GROUP_COUNT)))
+	num := int(math.Ceil(float64(count) / float64(GROUP_COUNT)))
 
-	for i := 0; i < chnNums; i++ {
+	for i := 0; i < num; i++ {
 		offset := i * GROUP_COUNT
 		worker(offset, GROUP_COUNT)
 	}
