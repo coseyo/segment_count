@@ -1,7 +1,6 @@
 package segment_count
 
 import (
-	"fmt"
 	"log"
 	"math"
 	"time"
@@ -33,19 +32,19 @@ func Exec(srcDB string, srcTable string, srcField string, distTable string) erro
 	if err != nil {
 		return err
 	}
-	fmt.Println("total count: ", count)
+	log.Println("Total count: ", count)
 
 	num := int(math.Ceil(float64(count) / float64(GROUP_COUNT)))
 
 	for i := 0; i < num; i++ {
-		log.Println("worker :", (i + 1), " / ", num)
+		log.Printf("worker : %d/%d -- percent : %.2f%%", (i + 1), num, float64(i+1)/float64(num)*100)
 		offset := i * GROUP_COUNT
 		worker(offset, GROUP_COUNT)
 	}
 
 	tEnd := time.Now()
 	duration := tEnd.Sub(tStart)
-	fmt.Println("Used time:", duration)
+	log.Println("Used time:", duration)
 
 	return nil
 }
