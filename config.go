@@ -7,9 +7,9 @@ const (
 
 	MYSQL_USER = "test"
 
-	MYSQL_PWD = "test"
+	MYSQL_PWD = "123456"
 
-	MYSQL_DB = "segment"
+	SRC_DB = "segment"
 
 	SRC_TABLE = "source"
 
@@ -17,7 +17,7 @@ const (
 
 	DIST_TABLE = "dist"
 
-	GROUP_COUNT = 1000
+	GROUP_COUNT = 2000
 
-	DICT_FILE = "github.com/huichen/sego/data/dictionary.txt"
+	DICT_FILE = "dict/dictionary.txt"
 )

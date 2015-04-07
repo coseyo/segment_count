@@ -2,6 +2,7 @@ package segment_count
 
 import (
 	"fmt"
+	"log"
 	"math"
 	"time"
 
@@ -13,8 +14,9 @@ var (
 	segmenter sego.Segmenter
 )
 
-func Exec(srcTable string, srcField string, distTable string) error {
-	t1 := time.Now()
+func Exec(srcDB string, srcTable string, srcField string, distTable string) error {
+	tStart := time.Now()
+	dataobj.srcDB = srcDB
 	dataobj.SrcTable = srcTable
 	dataobj.SrcField = srcField
 	dataobj.DistTable = distTable
@@ -36,13 +38,14 @@ func Exec(srcTable string, srcField string, distTable string) error {
 	num := int(math.Ceil(float64(count) / float64(GROUP_COUNT)))
 
 	for i := 0; i < num; i++ {
+		log.Println("worker :", (i + 1), " / ", num)
 		offset := i * GROUP_COUNT
 		worker(offset, GROUP_COUNT)
 	}
 
-	t2 := time.Now()
-	d := t2.Sub(t1)
-	fmt.Println("used time:", d)
+	tEnd := time.Now()
+	duration := tEnd.Sub(tStart)
+	fmt.Println("Used time:", duration)
 
 	return nil
 }
@@ -53,15 +56,18 @@ func worker(offset int, limit int) error {
 		return err
 	}
 
+	var wordSlice []string
+
 	for _, title := range titleArray {
 		text := []byte(title)
 		segments := segmenter.Segment(text)
 		segmentArray := sego.SegmentsToSlice(segments, false)
 		for _, segment := range segmentArray {
-			if err := dataobj.write(segment); err != nil {
-				return err
-			}
+			wordSlice = append(wordSlice, segment)
 		}
+	}
+	if err := dataobj.write(wordSlice); err != nil {
+		return err
 	}
 	return nil
 }

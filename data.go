@@ -3,25 +3,30 @@ package segment_count
 import (
 	"database/sql"
 	"fmt"
-	"log"
+	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type data struct {
 	db        *sql.DB
+	srcDB     string
 	SrcTable  string
 	SrcField  string
 	DistTable string
 }
 
 func (this *data) init() error {
-	db, err := sql.Open("mysql", MYSQL_USER+":"+MYSQL_PWD+"@tcp("+MYSQL_HOST+":"+MYSQL_PORT+")/"+MYSQL_DB+"?charset=utf8")
+	if this.srcDB == "" {
+		this.srcDB = SRC_DB
+	}
+	db, err := sql.Open("mysql", MYSQL_USER+":"+MYSQL_PWD+"@tcp("+MYSQL_HOST+":"+MYSQL_PORT+")/"+this.srcDB+"?charset=utf8")
 	if err != nil {
-		log.Println("database initialize error : ", err.Error())
+		fmt.Println("database initialize error : ", err.Error())
 		return err
 	}
 	this.db = db
+
 	if this.SrcTable == "" {
 		this.SrcTable = SRC_TABLE
 	}
@@ -66,8 +71,13 @@ func (this *data) read(offset int, limit int) ([]string, error) {
 	return titleArray, nil
 }
 
-func (this *data) write(word string) error {
-	sql := fmt.Sprintf("INSERT INTO `%s` (`word`, `total`) VALUES (\"%s\", 1) ON DUPLICATE KEY UPDATE `total`=`total`+1", this.DistTable, word)
+func (this *data) write(word []string) error {
+	var values string
+	for _, value := range word {
+		values += fmt.Sprintf("(\"%s\", 1),", value)
+	}
+	values = strings.TrimRight(values, ",")
+	sql := fmt.Sprintf("INSERT INTO `%s` (`word`, `total`) VALUES %s ON DUPLICATE KEY UPDATE `total`=`total`+1", this.DistTable, values)
 	_, err := this.db.Exec(sql)
 	if err != nil {
 		return err

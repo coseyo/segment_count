@@ -45,8 +45,6 @@ func Test_dataRead(t *testing.T) {
 func Test_dataWrite(t *testing.T) {
 	dataObj := data{}
 	dataObj.init()
-	err := dataObj.write("datatest")
-	expect(t, err, nil)
-	err = dataObj.write("datatest")
+	err := dataObj.write([]string{"datatest", "datatest2", "datatest"})
 	expect(t, err, nil)
 }
